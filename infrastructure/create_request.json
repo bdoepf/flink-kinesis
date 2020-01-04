@@ -1,0 +1,34 @@
+{
+  "ApplicationName": "kinesis-flink-s3",
+  "ApplicationDescription": "Kinesis flink app which stores data in s3",
+  "RuntimeEnvironment": "FLINK-1_8",
+  "ServiceExecutionRole": "arn:aws:iam::434007913030:role/kinesis-analytics-flink-s3",
+  "ApplicationConfiguration": {
+    "ApplicationCodeConfiguration": {
+      "CodeContent": {
+        "S3ContentLocation": {
+          "BucketARN": "arn:aws:s3:::kinesis-flink20200104140350192000000001",
+          "FileKey": "applications/flink-kinesis.jar"
+        }
+      },
+      "CodeContentType": "ZIPFILE"
+    },
+    "EnvironmentProperties":  {
+      "PropertyGroups": [
+        {
+          "PropertyGroupId": "FlinkS3AppProperties",
+          "PropertyMap" : {
+            "aws.region" : "eu-west-1",
+            "stream.name" : "test-stream",
+            "output.path": "s3a://kinesis-flink20200104140350192000000001/data/",
+            "checkpoint.interval.min": "5"
+          }
+        }
+      ]
+    }
+  },
+  "CloudWatchLoggingOptions": [{
+    "LogStreamARN": "arn:aws:logs:eu-west-1:434007913030:log-group:kinesis-analytics-flink:log-stream:kinesis-flink-s3"
+  }]
+}
+

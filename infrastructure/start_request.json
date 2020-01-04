@@ -1,0 +1,8 @@
+{
+  "ApplicationName": "kinesis-flink-s3",
+  "RunConfiguration": {
+    "ApplicationRestoreConfiguration": {
+      "ApplicationRestoreType": "RESTORE_FROM_LATEST_SNAPSHOT"
+    }
+  }
+}
