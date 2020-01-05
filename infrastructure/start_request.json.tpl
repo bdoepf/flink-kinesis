@@ -1,5 +1,5 @@
 {
-  "ApplicationName": "kinesis-flink-s3",
+  "ApplicationName": "${application_name}",
   "RunConfiguration": {
     "ApplicationRestoreConfiguration": {
       "ApplicationRestoreType": "RESTORE_FROM_LATEST_SNAPSHOT"

@@ -12,7 +12,3 @@ variable "kinesis-num-shards" {
   default = 1
 }
 
-variable "kinesis-flink-jar-path" {
-  description = "Path to the flink fat jar to upload"
-  default = "../target/scala-2.11/flink-kinesis-assembly-0.1.jar"
-}

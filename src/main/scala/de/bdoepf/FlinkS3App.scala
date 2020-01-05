@@ -25,7 +25,6 @@ object FlinkS3App {
   val REGION_PROPERTY = "aws.region"
   val STREAM_NAME_PROPERTY = "stream.name"
   val OUTPUT_PATH_PROPERTY = "output.path"
-  val CHECKPOINT_INTERVAL_MIN_PROPERTY = "checkpoint.interval.min"
 
   object KinesisPayloadDeserializer extends DeserializationSchema[TestData] {
     override def deserialize(message: Array[Byte]): TestData = TestData.parseFrom(message)
@@ -78,12 +77,10 @@ object FlinkS3App {
     val region = getProperty(properties, REGION_PROPERTY)
     val streamName = getProperty(properties, STREAM_NAME_PROPERTY)
     val outputPath = getProperty(properties, OUTPUT_PATH_PROPERTY)
-    val checkpointIntervalMin = getProperty(properties, CHECKPOINT_INTERVAL_MIN_PROPERTY).toInt
 
     // Create env
     val env = StreamExecutionEnvironment
       .getExecutionEnvironment
-      .enableCheckpointing(TimeUnit.MINUTES.toMillis(checkpointIntervalMin))
 
     // Kinesis source, parse protobuf payload
     val source = createKinesisSource(env, region, streamName)
@@ -97,10 +94,14 @@ object FlinkS3App {
 
     // Process
     source
+      .name("Kinesis Source")
+      .uid("kinesis-source-id")
       // partition incoming messages by even and odd ids
       .partitionCustom(EvenPartitioner, x => x.id)
       // store data as parquet partitioned by even and odd ids
       .addSink(sink)
+      .name("S3 Sink")
+      .uid("s3-sink-id")
 
     env.execute("Flink-Test-Job")
   }
@@ -109,8 +110,9 @@ object FlinkS3App {
     Option(properties.getProperty(propertyName)) match {
       case Some(p) => p
       case None =>
-        log.error(s"Property '$propertyName' not found in property group '$PROPERTY_GROUP_NAME'")
-        sys.exit(1)
+        val errorMsg = s"Property '$propertyName' not found in property group '$PROPERTY_GROUP_NAME'"
+        log.error(errorMsg)
+        throw new IllegalArgumentException(errorMsg)
     }
   }
 }

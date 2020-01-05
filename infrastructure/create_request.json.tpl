@@ -1,34 +1,57 @@
 {
-  "ApplicationName": "${application-name}",
+  "ApplicationName": "${application_name}",
   "ApplicationDescription": "Kinesis flink app which stores data in s3",
   "RuntimeEnvironment": "FLINK-1_8",
-  "ServiceExecutionRole": "${role-arn}",
+  "ServiceExecutionRole": "${role_arn}",
   "ApplicationConfiguration": {
     "ApplicationCodeConfiguration": {
       "CodeContent": {
         "S3ContentLocation": {
-          "BucketARN": "${bucket-arn}",
-          "FileKey": "${kinesis-app-jar-key}"
+          "BucketARN": "${bucket_arn}",
+          "FileKey": "${kinesis_app_jar_key}"
         }
       },
       "CodeContentType": "ZIPFILE"
     },
-    "EnvironmentProperties":  {
+    "ApplicationSnapshotConfiguration": {
+      "SnapshotsEnabled": true
+    },
+    "EnvironmentProperties": {
       "PropertyGroups": [
         {
           "PropertyGroupId": "FlinkS3AppProperties",
-          "PropertyMap" : {
-            "aws.region" : "${region}",
-            "stream.name" : "${stream-name}",
-            "output.path": "${output-path}",
-            "checkpoint.interval.min": "5"
+          "PropertyMap": {
+            "aws.region": "${region}",
+            "stream.name": "${stream_name}",
+            "output.path": "${output_path}"
           }
         }
       ]
+    },
+    "FlinkApplicationConfiguration": {
+      "ParallelismConfiguration": {
+        "AutoScalingEnabled": true,
+        "ConfigurationType": "CUSTOM",
+        "Parallelism": 2,
+        "ParallelismPerKPU": 2
+      },
+      "CheckpointConfiguration": {
+        "CheckpointingEnabled": true,
+        "CheckpointInterval": 300000,
+        "ConfigurationType": "CUSTOM",
+        "MinPauseBetweenCheckpoints": 5000
+      },
+      "MonitoringConfiguration": {
+        "ConfigurationType": "CUSTOM",
+        "LogLevel": "INFO",
+        "MetricsLevel": "TASK"
+      }
     }
   },
-  "CloudWatchLoggingOptions": [{
-    "LogStreamARN": "${log-stream-arn}"
-  }]
+  "CloudWatchLoggingOptions": [
+    {
+      "LogStreamARN": "${log_stream_arn}"
+    }
+  ]
 }
 
