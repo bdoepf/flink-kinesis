@@ -1,7 +1,7 @@
 ## Kinesis Analytics for Java Application (scala Flink) job
 Simple example scala Flink job consuming protobuf data from Kinesis Stream and storing it on s3 using partitioned parquet.
 This application is designed for deployment on [Kinesis Analytics for Java Applications](https://docs.aws.amazon.com/kinesisanalytics/latest/java/what-is.html).
-![Kinesis Analytics S3 Image](img/Kinesis Analytics S3.png)
+![Kinesis Analytics S3 Image](img/KinesisAnalyticsS3.png)
 
 ### Pre-requirements
 #### Required tools
