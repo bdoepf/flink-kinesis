@@ -78,6 +78,10 @@ object FlinkS3App {
     val streamName = getProperty(properties, STREAM_NAME_PROPERTY)
     val outputPath = getProperty(properties, OUTPUT_PATH_PROPERTY)
 
+    run(region, streamName, outputPath)
+  }
+
+  private[bdoepf] def run(region: String, streamName: String, outputPath: String) = {
     // Create env
     val env = StreamExecutionEnvironment
       .getExecutionEnvironment

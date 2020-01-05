@@ -2,6 +2,9 @@ package de.bdoepf
 
 object FlinkS3AppManualTest {
   def main(args: Array[String]): Unit = {
-    FlinkS3App.main(args)
+    val region = "eu-west-1"
+    val streamName = "test-stream"
+    val outputPath = "output"
+    FlinkS3App.run(region, streamName, outputPath)
   }
 }
